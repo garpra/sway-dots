@@ -1,3 +1,14 @@
+# Jika sesi login dan berada di tty1, jalankan Sway
+if status is-login
+    fish ~/.config/sway/gsetting.sh
+end
+
+# Menampilkan Fastfetch jika terminal adalah foot
+function fish_greeting
+    if test "$TERM" = foot
+        fastfetch -c ~/.config/fastfetch/presets/simple.jsonc
+    end
+end
 
 ###########
 ## ALIAS ##
