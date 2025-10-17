@@ -18,3 +18,5 @@ bluez-utils
 blueman
 power-profiles-daemon
 fastfetch
+ristretto
+rofi-wayland
