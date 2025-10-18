@@ -1,4 +1,5 @@
 sway
+swaybg
 foot
 fish
 ttf-0xproto-nerd
