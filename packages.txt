@@ -23,3 +23,6 @@ ristretto
 rofi-wayland
 wl-clipboard
 cliphist
+grim
+mpv
+yt-dlp
