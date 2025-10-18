@@ -21,3 +21,5 @@ power-profiles-daemon
 fastfetch
 ristretto
 rofi-wayland
+wl-clipboard
+cliphist
