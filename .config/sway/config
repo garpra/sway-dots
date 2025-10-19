@@ -60,6 +60,13 @@ input "1267:12587:ELAN050B:01_04F3:312B_Touchpad" {
 
 # Useful floating rules
 for_window [title=".*(Open Folder|Rename|File Operation Progress|Confirm to replace files|Extract|Compress).*"] floating enable
+for_window [app_id="ristretto"] floating enable
+for_window [app_id="zenity"] floating enable
+for_window [title="^Steam Settings$"] floating enable
+
+# Resize some floating windows
+for_window [app_id="xdg-desktop-portal-wlr"] resize set 900 600
+for_window [app_id="zenity"] resize set 900 600
 
 ##################
 ### DECORATION ###
@@ -93,6 +100,7 @@ bindsym $mod+e exec $filemanager
 bindsym $mod+space exec rofi -show drun -theme ~/.config/rofi/app-menu.rasi
 bindsym $mod+x exec sh ~/.scripts/menus/powermenu
 bindsym $mod+w exec sh ~/.scripts/menus/network-manager
+bindsym $mod+m exec sh ~/.scripts/menus/music-manager
 
 # Special keys to adjust brightness via brightnessctl
 bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
