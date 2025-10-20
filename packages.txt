@@ -29,3 +29,4 @@ yt-dlp
 zoxide
 starship
 autotiling
+yazi
