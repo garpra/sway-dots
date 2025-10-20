@@ -28,3 +28,4 @@ mpv
 yt-dlp
 zoxide
 starship
+autotiling
