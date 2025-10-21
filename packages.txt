@@ -31,3 +31,4 @@ starship
 autotiling
 yazi
 ydotool
+hyprpicker
