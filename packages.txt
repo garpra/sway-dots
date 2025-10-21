@@ -32,3 +32,4 @@ autotiling
 yazi
 ydotool
 hyprpicker
+swaync
