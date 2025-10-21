@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Direktori PID
+PIDFILE="/tmp/ydotool_clicker.pid"
+
+# Cek jika file PID ada
+if [ -f $PIDFILE ]; then
+    kill -SIGUSR1 $(cat "$PIDFILE")
+    sleep 0.1
+    notify-send "Autoclicker" "Toggled"
+else
+    notify-send "Autoclicker" "Not running" -u critical
+fi

@@ -108,6 +108,10 @@ bindsym $mod+m exec sh ~/.scripts/menus/music-manager
 # Screenshot
 bindsym Print exec ~/.scripts/screenshot
 
+# Toggle autoclicker dengan F8
+bindsym $mod+a exec foot -e ~/.scripts/ydotool-autoclick
+bindsym F8 exec ~/.scripts/toggle-autoclicker
+
 # Special keys to adjust brightness via brightnessctl
 bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
 bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
