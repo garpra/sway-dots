@@ -34,3 +34,5 @@ ydotool
 hyprpicker
 swaync
 wf-recorder
+waybar
+brightnessctl

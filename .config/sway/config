@@ -25,6 +25,7 @@ exec_always dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CUR
 exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 set $XDG_CURRENT_DESKTOP sway
+exec_always waybar
 
 # Polkit authentication
 exec_always /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
@@ -108,6 +109,7 @@ bindsym $mod+x exec sh ~/.scripts/menus/powermenu
 bindsym $mod+w exec sh ~/.scripts/menus/network-manager
 bindsym $mod+m exec sh ~/.scripts/menus/music-manager
 bindsym $mod+c exec sh ~/.scripts/menus/clipboard-manager
+bindsym $mod+r exec sh ~/.scripts/menus/recording-manager
 bindsym $mod+b exec sh ~/.scripts/toggle-waybar
 bindsym $mod+z exec hyprpicker -a
 
@@ -129,6 +131,9 @@ bindsym --locked XF86AudioMute exec pactl set-sink-mute \@DEFAULT_SINK@ toggle
 bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume \@DEFAULT_SINK@ -5%
 bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume \@DEFAULT_SINK@ +5%
 bindsym --locked XF86AudioMicMute exec pactl set-source-mute \@DEFAULT_SOURCE@ toggle
+
+# Waybar reload
+bindsym $mod+Shift+r exec killall -SIGUSR2 waybar
 
 # Reload config
 bindsym $mod+Shift+c reload
