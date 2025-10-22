@@ -33,3 +33,4 @@ yazi
 ydotool
 hyprpicker
 swaync
+wf-recorder
