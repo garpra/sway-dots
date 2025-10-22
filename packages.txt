@@ -36,3 +36,4 @@ swaync
 wf-recorder
 waybar
 brightnessctl
+xorg-xwayland
