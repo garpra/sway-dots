@@ -35,7 +35,7 @@
 Clone this repo to `$HOME`:
 
 ```bash
-git clone https://github.com/gilang-arya/dots-sway ~/.dotfiles/dots-sway
+git clone https://github.com/garpra/dots-sway ~/.dotfiles/dots-sway
 
 cd ~/.dotfiles/dots-sway
 ```
