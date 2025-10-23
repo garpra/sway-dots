@@ -1,60 +1,60 @@
 #!/bin/bash
 
 # Konfigurasi
-INTERVAL=0.1                             # Interval klik (detik)
+INTERVAL=0.1 # Interval klik (detik)
 PIDFILE="/tmp/ydotool_clicker.pid"
 SOCKET_PATH="/run/user/$UID/.ydotool_socket"
-TOGGLE=0                                 # 1 = Aktif, 0 = Nonaktif
+TOGGLE=0 # 1 = Aktif, 0 = Nonaktif
 
 # Fungsi: Start ydotoold
 start_ydotoold() {
-    echo "Check ydotoold..."
+  echo "Check ydotoold..."
 
-    # Jika ydotoold sudah berjalan
-    if pgrep -x ydotoold >/dev/null; then
-        echo "ydotoold already running."
+  # Jika ydotoold sudah berjalan
+  if pgrep -x ydotoold >/dev/null; then
+    echo "ydotoold already running."
 
-        # Jika socket hilang → restart
-        if [ ! -S "$SOCKET_PATH" ]; then
-            echo "Socket not found, restart ydotoold..."
-            pkill ydotoold
-            sleep 0.5
-        else
-            return 0
-        fi
+    # Jika socket hilang → restart
+    if [ ! -S "$SOCKET_PATH" ]; then
+      echo "Socket not found, restart ydotoold..."
+      pkill ydotoold
+      sleep 0.5
+    else
+      return 0
     fi
+  fi
 
-    echo "Start ydotoold..."
-    mkdir -p "/run/user/$UID"
+  echo "Start ydotoold..."
+  mkdir -p "/run/user/$UID"
 
-    sudo ydotoold \
-        --socket-path="$SOCKET_PATH" \
-        --socket-own="$UID:$GID" &
+  sudo ydotoold \
+    --socket-path="$SOCKET_PATH" \
+    --socket-own="$UID:$GID" &
 
-    # Tunggu socket muncul
-    for _ in {1..20}; do
-        [ -S "$SOCKET_PATH" ] && {
-            echo "ydotoold successfully executed."
-            return 0
-        }
-        sleep 0.5
-    done
+  # Tunggu socket muncul
+  for _ in {1..20}; do
+    [ -S "$SOCKET_PATH" ] && {
+      echo "ydotoold successfully executed."
+      return 0
+    }
+    sleep 0.5
+  done
 
-    echo "ERROR: Failed to start ydotoold."
-    exit 1
+  echo "ERROR: Failed to start ydotoold."
+  exit 1
 }
 
 # Fungsi: Toggle Autoclicker
 toggle_click() {
-    TOGGLE=$((1 - TOGGLE))
-    [[ $TOGGLE -eq 1 ]] && echo "Autoclicker: ON" || echo "Autoclicker: OFF"
+  TOGGLE=$((1 - TOGGLE))
+  [[ $TOGGLE -eq 1 ]] && echo "Autoclicker: ON" || echo "Autoclicker: OFF"
 }
 
 # Fungsi: Cleanup saat exit
 cleanup() {
-    echo "Stop autoclicker..."
-    rm -f "$PIDFILE"
-    exit 0
+  echo "Stop autoclicker..."
+  rm -f "$PIDFILE"
+  exit 0
 }
 
 # Setup Signals
@@ -62,7 +62,7 @@ trap "toggle_click" SIGUSR1
 trap "cleanup" SIGINT SIGTERM EXIT
 
 # Simpan PID
-echo $$ > "$PIDFILE"
+echo $$ >"$PIDFILE"
 
 # Mulai ydotoold
 start_ydotoold
@@ -77,16 +77,16 @@ EOF
 
 # Main Loop Autoclicker
 while true; do
-    if (( TOGGLE == 1 )); then
+  if ((TOGGLE == 1)); then
 
-        # Pastikan socket tersedia
-        if [ -S "$SOCKET_PATH" ]; then
-            YDOTOOL_SOCKET="$SOCKET_PATH" ydotool click 0xC0 &>/dev/null
-        else
-            echo "ERROR: Socket lost, trying to start ydotoold..."
-            start_ydotoold
-        fi
+    # Pastikan socket tersedia
+    if [ -S "$SOCKET_PATH" ]; then
+      YDOTOOL_SOCKET="$SOCKET_PATH" ydotool click 0xC0 &>/dev/null
+    else
+      echo "ERROR: Socket lost, trying to start ydotoold..."
+      start_ydotoold
     fi
+  fi
 
-    sleep "$INTERVAL"
+  sleep "$INTERVAL"
 done

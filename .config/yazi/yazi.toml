@@ -3,12 +3,13 @@ show_hidden = true
 
 [opener]
 play = [
-	{ run = 'mpv "$@"', orphan = true, for = "unix" },
+  { run = 'mpv "$@"', orphan = true, for = "unix" },
 ]
 edit = [
-	{ run = 'nvim "$@"', block = true, for = "unix" },
+  { run = 'nvim "$@"', block = true, for = "unix" },
 ]
 open = [
-    { run = 'ristretto "$@"', extensions = ["png", "jpg", "jpeg", "webp", "gif"], for = "unix", orphan = true },
-	{ run = 'xdg-open "$@"', desc = "Open" },
+  { run = 'ristretto "$@"', extensions = ["png", "jpg", "jpeg", "webp", "gif"], for = "unix", orphan = true },
+  { run = 'xdg-open "$@"', desc = "Open" },
 ]
+
