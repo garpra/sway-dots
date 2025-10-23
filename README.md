@@ -6,12 +6,12 @@
 
 <table>
   <tr>
-    <td><img src="https://github.com/gilang-arya/assets-repo/blob/main/dotfiles/sway/1.png?raw=true" width="300"/></td>
-    <td><img src="https://github.com/gilang-arya/assets-repo/blob/main/dotfiles/sway/2.png?raw=true" width="300"/></td>
+    <td><img src="https://raw.githubusercontent.com/garpra/assets-repo/main/screenshots/sway/1.png" width="300"/></td>
+    <td><img src="https://raw.githubusercontent.com/garpra/assets-repo/main/screenshots/sway/2.png" width="300"/></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/gilang-arya/assets-repo/blob/main/dotfiles/sway/3.png?raw=true" width="300"/></td>
-    <td><img src="https://github.com/gilang-arya/assets-repo/blob/main/dotfiles/sway/4.png?raw=true" width="300"/></td>
+    <td><img src="https://raw.githubusercontent.com/garpra/assets-repo/main/screenshots/sway/3.png" width="300"/></td>
+    <td><img src="https://raw.githubusercontent.com/garpra/assets-repo/main/screenshots/sway/4.png" width="300"/></td>
   </tr>
 </table>
 
