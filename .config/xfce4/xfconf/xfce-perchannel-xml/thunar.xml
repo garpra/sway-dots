@@ -12,4 +12,6 @@
   <property name="shortcuts-icon-size" type="string" value="THUNAR_ICON_SIZE_16"/>
   <property name="misc-symbolic-icons-in-sidepane" type="bool" value="true"/>
   <property name="last-separator-position" type="int" value="170"/>
+  <property name="last-details-view-zoom-level" type="string" value="THUNAR_ZOOM_LEVEL_38_PERCENT"/>
+  <property name="last-details-view-column-widths" type="string" value="50,50,137,50,50,50,50,50,839,50,50,61,50,148"/>
 </channel>

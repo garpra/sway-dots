@@ -13,7 +13,7 @@ set $right l
 
 # Programs
 set $term foot
-set $browser firefox --ProfileManager
+set $browser chromium
 set $filemanager thunar
 
 #################
@@ -105,20 +105,20 @@ bindsym $mod+q kill
 bindsym $mod+f exec $browser
 bindsym $mod+e exec $filemanager
 bindsym $mod+space exec rofi -show drun -theme ~/.config/rofi/app-menu.rasi
-bindsym $mod+x exec sh ~/.scripts/menus/powermenu
-bindsym $mod+w exec sh ~/.scripts/menus/network-manager
-bindsym $mod+m exec sh ~/.scripts/menus/music-manager
-bindsym $mod+c exec sh ~/.scripts/menus/clipboard-manager
-bindsym $mod+r exec sh ~/.scripts/menus/recording-manager
-bindsym $mod+b exec sh ~/.scripts/toggle-waybar
+bindsym $mod+x exec sh ~/.local/bin/menus/powermenu
+bindsym $mod+w exec sh ~/.local/bin/menus/network-manager
+bindsym $mod+m exec sh ~/.local/bin/menus/music-manager
+bindsym $mod+c exec sh ~/.local/bin/menus/clipboard-manager
+bindsym $mod+r exec sh ~/.local/bin/menus/recording-manager
+bindsym $mod+b exec toggle-waybar
 bindsym $mod+z exec hyprpicker -a
 
 # Screenshot
-bindsym Print exec ~/.scripts/screenshot
+bindsym Print exec screenshot
 
 # Toggle autoclicker dengan F8
-bindsym $mod+a exec foot -e ~/.scripts/ydotool-autoclick
-bindsym F8 exec ~/.scripts/toggle-autoclicker
+bindsym $mod+a exec foot -e ydotool-autoclick
+bindsym F8 exec toggle-autoclicker
 
 # Toggle control center
 bindsym $mod+n exec swaync-client -t -sw
