@@ -13,7 +13,7 @@ set $right l
 
 # Programs
 set $term foot
-set $browser chromium
+set $browser brave
 set $filemanager thunar
 
 #################
