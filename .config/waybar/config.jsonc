@@ -44,7 +44,6 @@
     "group/control-panel": {
         "orientation": "horizontal",
         "modules": [
-            "custom/recording",
             "custom/clipboard",
             "custom/bluetooth",
             "custom/networkmanager",
@@ -186,16 +185,9 @@
     },
     "custom/bluetooth": {
         "exec": "sh ~/.local/bin/menus/bluetooth-manager --status | cat",
-        "format": "{}  ",
+        "format": " {}  ",
         "interval": 5,
         "on-click": "sh ~/.local/bin/menus/bluetooth-manager",
-        "tooltip": false
-    },
-    "custom/recording": {
-        "exec": "sh ~/.local/bin/menus/recording-manager --status | cat",
-        "format": "{}  ",
-        "interval": 2,
-        "on-click": "sh ~/.local/bin/menus/recording-manager",
         "tooltip": false
     },
     "custom/networkmanager": {
