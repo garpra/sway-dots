@@ -26,6 +26,7 @@ alias vi="nvim"
 alias start='sudo systemctl start '
 alias stop='sudo systemctl stop '
 alias ff=fastfetch
+alias npm=pnpm
 alias fishconfig='nvim ~/.config/fish/config.fish'
 
 # Sway
@@ -72,3 +73,10 @@ end
 alias jctl="journalctl -p 3 -xb"
 alias clrjctl="sudo journalctl --vacuum-time=1s"
 
+
+# pnpm
+set -gx PNPM_HOME "/home/gilang/.local/share/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end
