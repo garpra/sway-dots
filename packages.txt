@@ -1,7 +1,9 @@
 sway
 swaybg
 foot
-fish
+zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
 ttf-0xproto-nerd
 thunar
 gvfs
