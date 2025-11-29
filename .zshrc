@@ -3,7 +3,6 @@
 ############################
 
 if [[ -o login ]]; then
-    [[ -f ~/.profile ]] && source ~/.profile
     bash ~/.config/sway/gsetting.sh
 fi
 
@@ -17,10 +16,27 @@ if [[ $- == *i* ]]; then
     eval "$(starship init zsh)"
     eval "$(zoxide init zsh)"
 
+    # History
+    HISTFILE=~/.zsh_history
+    HISTSIZE=10000
+    SAVEHIST=10000
+    setopt HIST_IGNORE_DUPS
+    setopt HIST_IGNORE_ALL_DUPS
+    setopt HIST_IGNORE_SPACE
+    setopt SHARE_HISTORY
+    setopt INC_APPEND_HISTORY
+    setopt HIST_REDUCE_BLANKS
+
+    # Keybindings
+    bindkey "^[[A" history-search-backward
+    bindkey "^[[B" history-search-forward
 
     # Completion
     autoload -Uz compinit
     compinit
+
+    # Case-insensitive completion
+    zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}'
 
     # Plugins
     source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
