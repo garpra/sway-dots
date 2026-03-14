@@ -61,9 +61,10 @@ alias c='clear'
 alias vi='nvim'
 alias start='sudo systemctl start '
 alias stop='sudo systemctl stop '
+alias ..="z .."
+alias ...="z ../.."
 
 alias ff='fastfetch'
-alias fishconfig='nvim ~/.config/fish/config.fish'
 
 # Sway
 alias getappid="swaymsg -t get_tree | jq '.. | select(.app_id?) | .app_id' | sort -u"
@@ -71,7 +72,6 @@ alias getapptitle="swaymsg -t get_tree | jq '.. | select(.name?) | .name' | sort
 
 # Paket
 alias paccek='yay -Q | grep '
-alias upgrade='yay -Syu && flatpak upgrade'
 alias update='sudo pacman -Syu'
 
 # Git
@@ -84,6 +84,8 @@ alias gc='git clone '
 alias gf='git fetch'
 alias grh='git reset --hard '
 alias grr='git remote remove '
+alias gl='git log'
+alias gr='git rebase'
 
 # Docker
 alias cleandock='docker container prune -f && docker volume prune -f && docker network prune -f'
