@@ -8,71 +8,103 @@ AUR_FILE="$SWAY_DIR/aur-packages.txt"
 
 log() { printf "[INFO] %s\n" "$1"; }
 warn() { printf "[WARN] %s\n" "$1"; }
-ok() { printf "[OK] %s\n" "$1"; }
+ok() { printf "[OK]   %s\n" "$1"; }
+die() {
+    printf "[ERR]  %s\n" "$1" >&2
+    exit 1
+}
+
+if [[ "$EUID" -eq 0 ]]; then
+    die "Do not run this script as root. Run as a regular user."
+fi
+
+if [[ ! -d "$DOTFILES_DIR" ]]; then
+    die "Dotfiles directory not found: $DOTFILES_DIR"
+fi
+
+if [[ ! -d "$SWAY_DIR" ]]; then
+    die "sway-dots directory not found: $SWAY_DIR"
+fi
 
 install_packages() {
     local file="$1"
-    local installer="$2"
-    local query_cmd="$3"
+    local -n _installer="$2"
+    local -n _query="$3"
 
     if [[ ! -f "$file" ]]; then
-        warn "File '$file' not found, skipping."
+        warn "Package file '$file' not found, skipping."
         return
     fi
 
     log "Installing packages from '$file'..."
-    readarray -t packages <"$file"
-    for pkg in "${packages[@]}"; do
-        [[ -z "$pkg" || "$pkg" == \#* ]] && continue
-        if ! $query_cmd "$pkg" &>/dev/null; then
-            log "Installing $pkg..."
-            $installer "$pkg"
-        else
+
+    while IFS= read -r pkg || [[ -n "$pkg" ]]; do
+        # Skip blank lines and comments
+        [[ -z "$pkg" || "$pkg" =~ ^[[:space:]]*$ || "$pkg" == \#* ]] && continue
+
+        # Strip leading and trailing whitespace
+        pkg="${pkg#"${pkg%%[![:space:]]*}"}"
+        pkg="${pkg%"${pkg##*[![:space:]]}"}"
+
+        if "${_query[@]}" "$pkg" &>/dev/null; then
             ok "$pkg already installed"
+        else
+            log "Installing $pkg..."
+            "${_installer[@]}" "$pkg"
         fi
-    done
+    done <"$file"
 }
 
-log "Installing required packages..."
-
 # Pacman packages
-install_packages \
-    "$PKG_FILE" \
-    'sudo pacman -S --needed --noconfirm' \
-    'pacman -Q'
+log "Installing pacman packages..."
+pacman_inst=("sudo" "pacman" "-S" "--needed" "--noconfirm")
+pacman_qry=("pacman" "-Q")
+install_packages "$PKG_FILE" pacman_inst pacman_qry
 
 # Install yay if missing
 if ! command -v yay >/dev/null 2>&1; then
     log "yay not found, installing..."
     sudo pacman -S --needed --noconfirm git base-devel
+
     tmpdir="$(mktemp -d)"
+    trap 'rm -rf "$tmpdir"' EXIT
+
     git clone https://aur.archlinux.org/yay.git "$tmpdir/yay"
     (cd "$tmpdir/yay" && makepkg -si --noconfirm)
+
+    trap - EXIT
     rm -rf "$tmpdir"
+
     ok "yay installed"
 fi
 
 # AUR packages
-install_packages \
-    "$AUR_FILE" \
-    'yay -S --needed --noconfirm' \
-    'yay -Q'
+log "Installing AUR packages..."
+yay_inst=("yay" "-S" "--needed" "--noconfirm")
+yay_qry=("yay" "-Q")
+install_packages "$AUR_FILE" yay_inst yay_qry
 
-# Enable Fish shell
-if command -v fish >/dev/null 2>&1; then
-    current_shell=$(basename "$SHELL")
-    if [[ "$current_shell" != "fish" ]]; then
-        log "Setting fish as default shell..."
-        if chsh -s "$(command -v fish)"; then
-            ok "Fish shell activated"
+# Set Zsh as default shell
+if command -v zsh >/dev/null 2>&1; then
+    zsh_path="$(command -v zsh)"
+    current_shell="$(basename "$SHELL")"
+
+    if [[ "$current_shell" != "zsh" ]]; then
+        log "Setting zsh as the default shell..."
+        if chsh -s "$zsh_path"; then
+            ok "zsh is now the default shell"
         else
-            warn "Failed to change shell, run 'chsh -s $(command -v fish)' manually."
+            warn "Failed to change shell. Run manually: chsh -s $zsh_path"
         fi
+    else
+        ok "zsh is already the default shell"
     fi
+else
+    warn "zsh not found, skipping shell configuration"
 fi
 
 # Enable ly display manager
-if systemctl list-unit-files | grep "^ly.service"; then
+if systemctl list-unit-files | grep -q "^ly.service"; then
     log "Enabling ly display manager..."
     if sudo systemctl enable ly.service >/dev/null 2>&1; then
         ok "ly enabled"
@@ -83,20 +115,57 @@ else
     warn "ly.service not found, display manager not enabled"
 fi
 
-# Ensure stow installed
+# Ensure stow is installed
 if ! command -v stow >/dev/null 2>&1; then
     log "stow not found, installing..."
     sudo pacman -S --needed --noconfirm stow
     ok "stow installed"
 fi
 
+# Create symlinks with stow
 log "Creating symlinks using stow..."
+mkdir -p \
+    "$HOME/.local/share/themes" \
+    "$HOME/.local/share/icons"
+
 cd "$DOTFILES_DIR"
-mkdir -p "$HOME/.local"
 stow -R --target="$HOME" sway-dots
 
-# Clone Theme
-log "Clone theme Tokyonight-dark"
-git clone https://github.com/garpra/tokyodark-gtk "$HOME/.themes/Tokyonight-Dark"
+# Clone Tokyonight-Dark theme
+if [[ ! -d "$HOME/.local/share/themes/Tokyonight-Dark" ]]; then
+    log "Cloning Tokyonight-Dark theme..."
+    git clone https://github.com/garpra/tokyodark-gtk \
+        "$HOME/.local/share/themes/Tokyonight-Dark"
+    ok "Tokyonight-Dark theme installed"
+fi
 
-ok "Setup completed"
+# Install Tela-circle icon theme
+if [[ ! -d "$HOME/.local/share/icons/Tela-circle" ]]; then
+    log "Installing Tela-circle icon theme..."
+    tela_tmp="$(mktemp -d)"
+    trap 'rm -rf "$tela_tmp"' EXIT
+
+    git clone https://github.com/vinceliuice/Tela-circle-icon-theme "$tela_tmp/tela-circle"
+    bash "$tela_tmp/tela-circle/install.sh"
+
+    trap - EXIT
+    rm -rf "$tela_tmp"
+    ok "Tela-circle icon theme installed"
+fi
+
+# Install Bibata-Modern-Ice cursor
+if [[ ! -d "$HOME/.local/share/icons/Bibata-Modern-Ice" ]]; then
+    log "Downloading Bibata-Modern-Ice cursor..."
+    bibata_url="https://github.com/ful1e5/Bibata_Cursor/releases/download/v2.0.7/Bibata-Modern-Ice.tar.xz"
+    bibata_tmp="$(mktemp -d)"
+    trap 'rm -rf "$bibata_tmp"' EXIT
+
+    curl -L --fail --output "$bibata_tmp/bibata.tar.xz" "$bibata_url"
+    tar -xJf "$bibata_tmp/bibata.tar.xz" -C "$HOME/.local/share/icons"
+
+    trap - EXIT
+    rm -rf "$bibata_tmp"
+    ok "Bibata-Modern-Ice cursor installed"
+fi
+
+ok "Setup completed!"
