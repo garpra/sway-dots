@@ -3,7 +3,7 @@
 ############################
 
 if [[ -o login ]]; then
-    bash ~/.config/sway/gsetting.sh
+  bash ~/.config/sway/gsetting.sh
 fi
 
 ############################
@@ -12,35 +12,35 @@ fi
 
 if [[ $- == *i* ]]; then
 
-    # Tools
-    eval "$(starship init zsh)"
-    eval "$(zoxide init zsh)"
+  # Tools
+  eval "$(starship init zsh)"
+  eval "$(zoxide init zsh)"
 
-    # History
-    HISTFILE=~/.zsh_history
-    HISTSIZE=10000
-    SAVEHIST=10000
-    setopt HIST_IGNORE_DUPS
-    setopt HIST_IGNORE_ALL_DUPS
-    setopt HIST_IGNORE_SPACE
-    setopt SHARE_HISTORY
-    setopt INC_APPEND_HISTORY
-    setopt HIST_REDUCE_BLANKS
+  # History
+  HISTFILE=~/.zsh_history
+  HISTSIZE=10000
+  SAVEHIST=10000
+  setopt HIST_IGNORE_DUPS
+  setopt HIST_IGNORE_ALL_DUPS
+  setopt HIST_IGNORE_SPACE
+  setopt SHARE_HISTORY
+  setopt INC_APPEND_HISTORY
+  setopt HIST_REDUCE_BLANKS
 
-    # Keybindings
-    bindkey "^[[A" history-search-backward
-    bindkey "^[[B" history-search-forward
+  # Keybindings
+  bindkey "^[[A" history-search-backward
+  bindkey "^[[B" history-search-forward
 
-    # Completion
-    autoload -Uz compinit
-    compinit
+  # Completion
+  autoload -Uz compinit
+  compinit
 
-    # Case-insensitive completion
-    zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}'
+  # Case-insensitive completion
+  zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}'
 
-    # Plugins
-    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  # Plugins
+  source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 fi
 
@@ -49,7 +49,7 @@ fi
 ############################
 
 if [[ "$TERM" == "foot" ]]; then
-    fastfetch -c ~/.config/fastfetch/presets/simple.jsonc
+  fastfetch -c ~/.config/fastfetch/presets/simple.jsonc
 fi
 
 ############################
@@ -108,12 +108,12 @@ alias clrjctl="sudo journalctl --vacuum-time=1s"
 ############################
 
 cleanup() {
-    local orphaned
-    orphaned=$(pacman -Qtdq)
+  local orphaned
+  orphaned=$(pacman -Qtdq)
 
-    if [[ -n "$orphaned" ]]; then
-        sudo pacman -Rns $orphaned
-    else
-        echo "There are no packages to clean."
-    fi
+  if [[ -n "$orphaned" ]]; then
+    sudo pacman -Rns $orphaned
+  else
+    echo "There are no packages to clean."
+  fi
 }

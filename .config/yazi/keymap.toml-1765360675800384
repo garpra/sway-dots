@@ -1,4 +1,0 @@
-[manager]
-keybinds = [
-  { on = "t", run = 'shell --detach -- foot --working-directory "$(dirname "$FILE")"' }
-]

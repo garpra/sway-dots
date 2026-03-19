@@ -10,49 +10,49 @@ log() { printf "[INFO] %s\n" "$1"; }
 warn() { printf "[WARN] %s\n" "$1"; }
 ok() { printf "[OK]   %s\n" "$1"; }
 die() {
-    printf "[ERR]  %s\n" "$1" >&2
-    exit 1
+  printf "[ERR]  %s\n" "$1" >&2
+  exit 1
 }
 
 if [[ "$EUID" -eq 0 ]]; then
-    die "Do not run this script as root. Run as a regular user."
+  die "Do not run this script as root. Run as a regular user."
 fi
 
 if [[ ! -d "$DOTFILES_DIR" ]]; then
-    die "Dotfiles directory not found: $DOTFILES_DIR"
+  die "Dotfiles directory not found: $DOTFILES_DIR"
 fi
 
 if [[ ! -d "$SWAY_DIR" ]]; then
-    die "sway-dots directory not found: $SWAY_DIR"
+  die "sway-dots directory not found: $SWAY_DIR"
 fi
 
 install_packages() {
-    local file="$1"
-    local -n _installer="$2"
-    local -n _query="$3"
+  local file="$1"
+  local -n _installer="$2"
+  local -n _query="$3"
 
-    if [[ ! -f "$file" ]]; then
-        warn "Package file '$file' not found, skipping."
-        return
+  if [[ ! -f "$file" ]]; then
+    warn "Package file '$file' not found, skipping."
+    return
+  fi
+
+  log "Installing packages from '$file'..."
+
+  while IFS= read -r pkg || [[ -n "$pkg" ]]; do
+    # Skip blank lines and comments
+    [[ -z "$pkg" || "$pkg" =~ ^[[:space:]]*$ || "$pkg" == \#* ]] && continue
+
+    # Strip leading and trailing whitespace
+    pkg="${pkg#"${pkg%%[![:space:]]*}"}"
+    pkg="${pkg%"${pkg##*[![:space:]]}"}"
+
+    if "${_query[@]}" "$pkg" &>/dev/null; then
+      ok "$pkg already installed"
+    else
+      log "Installing $pkg..."
+      "${_installer[@]}" "$pkg"
     fi
-
-    log "Installing packages from '$file'..."
-
-    while IFS= read -r pkg || [[ -n "$pkg" ]]; do
-        # Skip blank lines and comments
-        [[ -z "$pkg" || "$pkg" =~ ^[[:space:]]*$ || "$pkg" == \#* ]] && continue
-
-        # Strip leading and trailing whitespace
-        pkg="${pkg#"${pkg%%[![:space:]]*}"}"
-        pkg="${pkg%"${pkg##*[![:space:]]}"}"
-
-        if "${_query[@]}" "$pkg" &>/dev/null; then
-            ok "$pkg already installed"
-        else
-            log "Installing $pkg..."
-            "${_installer[@]}" "$pkg"
-        fi
-    done <"$file"
+  done <"$file"
 }
 
 # Pacman packages
@@ -63,19 +63,19 @@ install_packages "$PKG_FILE" pacman_inst pacman_qry
 
 # Install yay if missing
 if ! command -v yay >/dev/null 2>&1; then
-    log "yay not found, installing..."
-    sudo pacman -S --needed --noconfirm git base-devel
+  log "yay not found, installing..."
+  sudo pacman -S --needed --noconfirm git base-devel
 
-    tmpdir="$(mktemp -d)"
-    trap 'rm -rf "$tmpdir"' EXIT
+  tmpdir="$(mktemp -d)"
+  trap 'rm -rf "$tmpdir"' EXIT
 
-    git clone https://aur.archlinux.org/yay.git "$tmpdir/yay"
-    (cd "$tmpdir/yay" && makepkg -si --noconfirm)
+  git clone https://aur.archlinux.org/yay.git "$tmpdir/yay"
+  (cd "$tmpdir/yay" && makepkg -si --noconfirm)
 
-    trap - EXIT
-    rm -rf "$tmpdir"
+  trap - EXIT
+  rm -rf "$tmpdir"
 
-    ok "yay installed"
+  ok "yay installed"
 fi
 
 # AUR packages
@@ -86,86 +86,86 @@ install_packages "$AUR_FILE" yay_inst yay_qry
 
 # Set Zsh as default shell
 if command -v zsh >/dev/null 2>&1; then
-    zsh_path="$(command -v zsh)"
-    current_shell="$(basename "$SHELL")"
+  zsh_path="$(command -v zsh)"
+  current_shell="$(basename "$SHELL")"
 
-    if [[ "$current_shell" != "zsh" ]]; then
-        log "Setting zsh as the default shell..."
-        if chsh -s "$zsh_path"; then
-            ok "zsh is now the default shell"
-        else
-            warn "Failed to change shell. Run manually: chsh -s $zsh_path"
-        fi
+  if [[ "$current_shell" != "zsh" ]]; then
+    log "Setting zsh as the default shell..."
+    if chsh -s "$zsh_path"; then
+      ok "zsh is now the default shell"
     else
-        ok "zsh is already the default shell"
+      warn "Failed to change shell. Run manually: chsh -s $zsh_path"
     fi
+  else
+    ok "zsh is already the default shell"
+  fi
 else
-    warn "zsh not found, skipping shell configuration"
+  warn "zsh not found, skipping shell configuration"
 fi
 
 # Enable ly display manager
 if systemctl list-unit-files | grep -q "^ly.service"; then
-    log "Enabling ly display manager..."
-    if sudo systemctl enable ly.service >/dev/null 2>&1; then
-        ok "ly enabled"
-    else
-        warn "Failed to enable ly"
-    fi
+  log "Enabling ly display manager..."
+  if sudo systemctl enable ly.service >/dev/null 2>&1; then
+    ok "ly enabled"
+  else
+    warn "Failed to enable ly"
+  fi
 else
-    warn "ly.service not found, display manager not enabled"
+  warn "ly.service not found, display manager not enabled"
 fi
 
 # Ensure stow is installed
 if ! command -v stow >/dev/null 2>&1; then
-    log "stow not found, installing..."
-    sudo pacman -S --needed --noconfirm stow
-    ok "stow installed"
+  log "stow not found, installing..."
+  sudo pacman -S --needed --noconfirm stow
+  ok "stow installed"
 fi
 
 # Create symlinks with stow
 log "Creating symlinks using stow..."
 mkdir -p \
-    "$HOME/.local/share/themes" \
-    "$HOME/.local/share/icons"
+  "$HOME/.local/share/themes" \
+  "$HOME/.local/share/icons"
 
 cd "$DOTFILES_DIR"
 stow -R --target="$HOME" sway-dots
 
 # Clone Tokyonight-Dark theme
 if [[ ! -d "$HOME/.local/share/themes/Tokyonight-Dark" ]]; then
-    log "Cloning Tokyonight-Dark theme..."
-    git clone https://github.com/garpra/tokyodark-gtk \
-        "$HOME/.local/share/themes/Tokyonight-Dark"
-    ok "Tokyonight-Dark theme installed"
+  log "Cloning Tokyonight-Dark theme..."
+  git clone https://github.com/garpra/tokyodark-gtk \
+    "$HOME/.local/share/themes/Tokyonight-Dark"
+  ok "Tokyonight-Dark theme installed"
 fi
 
 # Install Tela-circle icon theme
 if [[ ! -d "$HOME/.local/share/icons/Tela-circle" ]]; then
-    log "Installing Tela-circle icon theme..."
-    tela_tmp="$(mktemp -d)"
-    trap 'rm -rf "$tela_tmp"' EXIT
+  log "Installing Tela-circle icon theme..."
+  tela_tmp="$(mktemp -d)"
+  trap 'rm -rf "$tela_tmp"' EXIT
 
-    git clone https://github.com/vinceliuice/Tela-circle-icon-theme "$tela_tmp/tela-circle"
-    bash "$tela_tmp/tela-circle/install.sh"
+  git clone https://github.com/vinceliuice/Tela-circle-icon-theme "$tela_tmp/tela-circle"
+  bash "$tela_tmp/tela-circle/install.sh"
 
-    trap - EXIT
-    rm -rf "$tela_tmp"
-    ok "Tela-circle icon theme installed"
+  trap - EXIT
+  rm -rf "$tela_tmp"
+  ok "Tela-circle icon theme installed"
 fi
 
 # Install Bibata-Modern-Ice cursor
 if [[ ! -d "$HOME/.local/share/icons/Bibata-Modern-Ice" ]]; then
-    log "Downloading Bibata-Modern-Ice cursor..."
-    bibata_url="https://github.com/ful1e5/Bibata_Cursor/releases/download/v2.0.7/Bibata-Modern-Ice.tar.xz"
-    bibata_tmp="$(mktemp -d)"
-    trap 'rm -rf "$bibata_tmp"' EXIT
+  log "Downloading Bibata-Modern-Ice cursor..."
+  bibata_url="https://github.com/ful1e5/Bibata_Cursor/releases/download/v2.0.7/Bibata-Modern-Ice.tar.xz"
+  bibata_tmp="$(mktemp -d)"
+  trap 'rm -rf "$bibata_tmp"' EXIT
 
-    curl -L --fail --output "$bibata_tmp/bibata.tar.xz" "$bibata_url"
-    tar -xJf "$bibata_tmp/bibata.tar.xz" -C "$HOME/.local/share/icons"
+  curl -L --fail --output "$bibata_tmp/bibata.tar.xz" "$bibata_url"
+  tar -xJf "$bibata_tmp/bibata.tar.xz" -C "$HOME/.local/share/icons"
 
-    trap - EXIT
-    rm -rf "$bibata_tmp"
-    ok "Bibata-Modern-Ice cursor installed"
+  trap - EXIT
+  rm -rf "$bibata_tmp"
+  ok "Bibata-Modern-Ice cursor installed"
 fi
 
 ok "Setup completed!"
