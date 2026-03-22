@@ -115,11 +115,7 @@ bindsym $mod+b exec toggle-waybar
 bindsym $mod+z exec hyprpicker -a
 
 # Screenshot
-bindsym Print exec screenshot
-
-# Toggle autoclicker dengan F8
-bindsym $mod+a exec foot -e ydotool-autoclick
-bindsym F8 exec toggle-autoclicker
+bindsym Print exec screenshot-wayland
 
 # Toggle control center
 bindsym $mod+n exec swaync-client -t -sw

@@ -126,10 +126,17 @@ fi
 log "Creating symlinks using stow..."
 mkdir -p \
   "$HOME/.local/share/themes" \
-  "$HOME/.local/share/icons"
+  "$HOME/.local/share/icons" \
+  "$HOME/.local/share/bin"
 
 cd "$DOTFILES_DIR"
 stow -R --target="$HOME" sway-dots
+
+# Clone script for screenshot in wayland
+curl -fsSL https://raw.githubusercontent.com/garpra/dotbin/main/screenshot-wayland -o ~/.local/bin/screenshot-wayland && chmod +x ~/.local/bin/screenshot-wayland
+
+# Clone script for toggle waybar
+curl -fsSL https://raw.githubusercontent.com/garpra/dotbin/main/toggle-waybar -o ~/.local/bin/toggle-waybar && chmod +x ~/.local/bin/toggle-waybar
 
 # Clone Tokyonight-Dark theme
 if [[ ! -d "$HOME/.local/share/themes/Tokyonight-Dark" ]]; then
