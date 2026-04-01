@@ -5,11 +5,6 @@ zsh
 zsh-autosuggestions
 zsh-syntax-highlighting
 ttf-0xproto-nerd
-thunar
-gvfs
-thunar-archive-plugin
-xarchiver
-tumbler
 polkit-gnome
 eza
 xdg-desktop-portal
@@ -21,7 +16,7 @@ bluez-utils
 blueman
 power-profiles-daemon
 fastfetch
-ristretto
+imv
 rofi-wayland
 wl-clipboard
 cliphist
@@ -39,3 +34,7 @@ wf-recorder
 waybar
 brightnessctl
 xorg-xwayland
+zip
+unzip
+unrar
+trash-cli
