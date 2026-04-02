@@ -38,3 +38,4 @@ zip
 unzip
 unrar
 trash-cli
+udisks2
