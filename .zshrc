@@ -31,6 +31,10 @@ if [[ $- == *i* ]]; then
   bindkey "^[[A" history-search-backward
   bindkey "^[[B" history-search-forward
 
+  # Enable undo / redo like fish
+  bindkey '^Z' undo
+  bindkey '^R' redo
+
   # Completion
   autoload -Uz compinit
   compinit
@@ -116,4 +120,12 @@ cleanup() {
   else
     echo "There are no packages to clean."
   fi
+}
+
+y() {
+  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+  command yazi "$@" --cwd-file="$tmp"
+  IFS= read -r -d '' cwd <"$tmp"
+  [ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
+  rm -f -- "$tmp"
 }
