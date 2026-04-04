@@ -33,6 +33,7 @@ wf-recorder
 waybar
 brightnessctl
 xorg-xwayland
+mako
 libnotify
 zip
 unzip
