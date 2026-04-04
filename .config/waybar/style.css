@@ -76,10 +76,9 @@ tray,
 #pulseaudio,
 #backlight,
 #idle_inhibitor,
-#custom-notification,
-#custom-clipboard,
 #custom-networkmanager,
 #custom-bluetooth,
+#custom-power,
 #custom-power,
 #custom-l_end,
 #custom-r_end {
@@ -105,6 +104,10 @@ tray,
 }
 
 #backlight {
+  color: #f7768e;
+}
+
+#custom-power {
   color: #f7768e;
 }
 

@@ -29,11 +29,11 @@ autotiling
 yazi
 ydotool
 hyprpicker
-swaync
 wf-recorder
 waybar
 brightnessctl
 xorg-xwayland
+libnotify
 zip
 unzip
 unrar
