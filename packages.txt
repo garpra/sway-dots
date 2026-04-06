@@ -1,9 +1,7 @@
 sway
 swaybg
 foot
-zsh
-zsh-autosuggestions
-zsh-syntax-highlighting
+fish
 ttf-0xproto-nerd
 polkit-gnome
 eza
