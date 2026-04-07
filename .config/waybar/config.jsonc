@@ -65,8 +65,8 @@
     },
     "format": "{icon}",
     "format-icons": {
-      "focused": "",
-      "default": "⭘"
+      "focused": "",
+      "default": "󰝣"
     }
   },
   "wlr/taskbar": {
