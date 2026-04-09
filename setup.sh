@@ -106,7 +106,7 @@ fi
 # Enable ly display manager
 if systemctl list-unit-files | grep -q "^ly.service"; then
   log "Enabling ly display manager..."
-  if sudo systemctl enable ly.service >/dev/null 2>&1; then
+  if sudo systemctl enable ly@tty2.service >/dev/null 2>&1; then
     ok "ly enabled"
   else
     warn "Failed to enable ly"
@@ -138,12 +138,12 @@ curl -fsSL https://raw.githubusercontent.com/garpra/dotbin/main/screenshot-wayla
 # Clone script for toggle waybar
 curl -fsSL https://raw.githubusercontent.com/garpra/dotbin/main/toggle-waybar -o ~/.local/bin/toggle-waybar && chmod +x ~/.local/bin/toggle-waybar
 
-# Clone Tokyonight-Dark theme
-if [[ ! -d "$HOME/.local/share/themes/Tokyonight-Dark" ]]; then
-  log "Cloning Tokyonight-Dark theme..."
-  git clone https://github.com/garpra/tokyodark-gtk \
-    "$HOME/.local/share/themes/Tokyonight-Dark"
-  ok "Tokyonight-Dark theme installed"
+# Clone Tokyonight-Night theme
+if [[ ! -d "$HOME/.local/share/themes/Tokyonight-Night" ]]; then
+  log "Cloning Tokyonight-Night theme..."
+  git clone https://github.com/garpra/tokyonight-gtk \
+    "$HOME/.local/share/themes/Tokyonight-Night"
+  ok "Tokyonight-Night Gtk theme installed"
 fi
 
 # Install Tela-circle icon theme
