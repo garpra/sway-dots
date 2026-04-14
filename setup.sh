@@ -84,27 +84,27 @@ yay_inst=("yay" "-S" "--needed" "--noconfirm")
 yay_qry=("yay" "-Q")
 install_packages "$AUR_FILE" yay_inst yay_qry
 
-# Set Zsh as default shell
-if command -v zsh >/dev/null 2>&1; then
-  zsh_path="$(command -v zsh)"
+# Set fish as default shell
+if command -v fish >/dev/null 2>&1; then
+  fish_path="$(command -v fish)"
   current_shell="$(basename "$SHELL")"
 
-  if [[ "$current_shell" != "zsh" ]]; then
-    log "Setting zsh as the default shell..."
-    if chsh -s "$zsh_path"; then
-      ok "zsh is now the default shell"
+  if [[ "$current_shell" != "fish" ]]; then
+    log "Setting fish as the default shell..."
+    if chsh -s "$fish_path"; then
+      ok "fish is now the default shell"
     else
-      warn "Failed to change shell. Run manually: chsh -s $zsh_path"
+      warn "Failed to change shell. Run manually: chsh -s $fish_path"
     fi
   else
-    ok "zsh is already the default shell"
+    ok "fish is already the default shell"
   fi
 else
-  warn "zsh not found, skipping shell configuration"
+  warn "fish not found, skipping shell configuration"
 fi
 
 # Enable ly display manager
-if systemctl list-unit-files | grep -q "^ly.service"; then
+if command -v ly-dm >/dev/null 2>&1; then
   log "Enabling ly display manager..."
   if sudo systemctl enable ly@tty2.service >/dev/null 2>&1; then
     ok "ly enabled"
