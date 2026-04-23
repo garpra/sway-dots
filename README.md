@@ -2,19 +2,6 @@
 
 > Clean & minimal Sway setup with Arch Linux.
 
-## 📸 Preview
-
-<table>
-  <tr>
-    <td><img src="https://raw.githubusercontent.com/garpra/assets-repo/main/screenshots/sway/1.png" width="300"/></td>
-    <td><img src="https://raw.githubusercontent.com/garpra/assets-repo/main/screenshots/sway/2.png" width="300"/></td>
-  </tr>
-  <tr>
-    <td><img src="https://raw.githubusercontent.com/garpra/assets-repo/main/screenshots/sway/3.png" width="300"/></td>
-    <td><img src="https://raw.githubusercontent.com/garpra/assets-repo/main/screenshots/sway/4.png" width="300"/></td>
-  </tr>
-</table>
-
 ## 🔧 Stack
 
 - **Operating System:** Arch Linux
